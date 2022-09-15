@@ -1,0 +1,204 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API BS Product Statement V2",
+    "description": "Permite obtener el estado de cuenta del cliente en formato pdf para cuenta de tipo ahorros, corriente, maestra, CTS, Créditos ALS, Mercado Capitales y de tarjeta de crédito.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "/customer-management/product-service/v2"
+    }
+  ],
+  "x-bcp-api-type": "BS",
+  "x-bcp-api-id": "product-statement",
+  "externalDocs": {
+    "description": "Para más información de la API BS Product Statement V2",
+    "url": "https://confluence.lima.bcp.com.pe/display/APCSPUB/Business+Product+Statement+V2"
+  },
+  "paths": {
+    "/product-statements/retrieve": {
+      "post": {
+        "tags": [
+          "Product Statement"
+        ],
+        "summary": "Permite obtener el estado de cuenta de tipo ahorros, corriente, maestra, CTS, Créditos ALS, Mercado Capitales y de tarjeta de crédito para un cliente (natural o juridica). El pdf devuelto podrá ser generado con clave o no.",
+        "description": "### Acerca de la funcionalidad expuesta\nEl servicio permite la consulta de un estado de cuenta de tipo Ahorros, Corriente, Maestra y de Tarjeta de Crédito.\nCuando se realiza la consulta, mediante el ingreso de información como id de cuenta, mes y año se devolverá la información del estado de cuenta con un formato de Base64.\nEn caso de enviar el keyValue como parámetro se devolverá la información del estado de cuenta con un formato de Base64 cifrado.\n### Información complementaria  \n\n### Precondiciones para el consumo de esta versión de la API\nNo aplica.\n### Data de Prueba.\nConsiderar la información del json.\n### Query Parameters válidos en esta versión de la API\nNo Aplica.\n### Usos válidos de Query Parameters\nNo Aplica.\n### Variantes válidas del Payload (Cuerpo del mensaje)\n\n    ### Caso 01: Obtener estado de cuenta con número de cuenta, PDF sin contraseña:\n  ```json\n\n      {\n        \"product\": {\n          \"productId\" : \"19111140480009\",\n          \"productDetail\" : {\n            \"family\" : {\n              \"code\" : \"005\" \n            }\n          }\n        },\n        \"documentDate\" : {\n          \"year\" : \"2017\",\n          \"month\" : \"08\"\n        }\n      }\n\n   ```\n      \n    ### Caso 02: Obtener estado de cuenta con número de cuenta, PDF con contraseña:\n\n  ```json\n\n      {\n        \"product\": {\n          \"productId\" : \"19111140480009\",\n          \"productDetail\" : {\n            \"family\" : {\n              \"code\" : \"005\"\n            }\n          }\n        },\n        \"documentDate\" : {\n          \"year\" : \"2017\",\n          \"month\" : \"08\"\n        },\n        \"keyValue\" : \"04586598\"\n      }\n\n   ```\n   \n    ### Caso 03: Obtener estado de cuenta de producto de mercado capitales, PDF con contraseña:\n\n  ```json\n\n      {\n        \"product\": {\n          \"productId\" : \"000000143687927\",\n          \"productDetail\" : {\n            \"family\" : {\n              \"code\" : \"050\"\n            },\n            \"tioaux\" : {\n              \"code\" : \"CTEORD\"\n            }\n          },\n          \"employeeAccountType\" : {\n              \"code\" : \"1\"\n            }\n        },\n        \"documentDate\" : {\n          \"year\" : \"2017\",\n          \"month\" : \"08\",\n          \"day\" : \"10\"\n        },\n        \"keyValue\" : \"04586598\"\n      }\n\n   ```\n\n    ### Caso 04: Obtener estado de cuenta de producto de mercado capitales, PDF sin contraseña:\n\n  ```json\n\n      {\n        \"product\": {\n          \"productId\" : \"000000143687927\",\n          \"productDetail\" : {\n            \"family\" : {\n              \"code\" : \"050\"\n            },\n            \"tioaux\" : {\n              \"code\" : \"CTEORD\"\n            }                    \n          },\n          \"employeeAccountType\" : {\n              \"code\" : \"1\"\n          }\n        },\n        \"documentDate\" : {\n          \"year\" : \"2017\",\n          \"month\" : \"08\",\n          \"day\" : \"10\"\n        }\n      }\n\n   ```           \n\n\n### Lista de Valores usadas en esta versión de la API\n<br/>\n| Atributo | Valor |\n|----------|----------|\n|    product.productDetail.family.code | Valores:  003 = Tarjetas de Crédito, 004 = Cuenta Corriente, 005 = Cuentas de Ahorro, 007 = Cuenta Maestra, 009 = CTS, 020 = Créditos ALS (vehiculares, hipotecarios, efectivos), 050 = Mercado de Capitales (FondoMutuo y Polizas)|\n| product.employeeAccountType.code | Valores: 0, 1, 3, 5 |                            \n\n### Códigos de error usados en esta versión de la API\n| Código | HTTP Status | Descripción |\n|--------|-------------|--------|\n| TL0003 | 400 |Los datos proporcionados no son validos. |\n| TL0006 | 409 | Los datos proporcionados no cumplen con los criterios para ser procesado |\n| TL0004 | 500 |El servicio no se encuentra disponible. Por favor reintente mas tarde. |\n| TL0005 | 500 | No se encontro el servidor solicitado. |\n| TL0007 | 500 |Ocurrio un error en el servicio externo. |\n| TL0009 | 500 | Ocurrio un error intentando invocar servicios externos. Por favor contactarse con el Soporte Tecnico. |\n| TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |\n| TL9999 | 500 |Ocurrio un error inesperado. Por favor contactarse con el Soporte Tecnico. |\n\n",
+        "operationId": "retrieveProductStatement",
+        "x-atlas-header": {
+          "$ref": "#/components/schemas/ProductStatementsHeaders"
+        },
+        "parameters": [
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+          },
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+          },
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+          },
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+          },
+          {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Ocp-Apim-Subscription-Key"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Se obtiene el estado de cuenta de un cliente.",
+            "content": {
+              "application/stream+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductStatementsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductStatementsResponse"
+                }
+              },
+              "application/json;charset=UTF-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductStatementsResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No se encontro estado de cuenta."
+          },
+          "400": {
+            "description": "El cliente envió datos incorrectos.",
+            "content": {
+              "application/stream+json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json;charset=UTF-8": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error funcional, se debe enviar más datos.",
+            "content": {
+              "application/stream+json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json;charset=UTF-8": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al ejecutar proceso.",
+            "content": {
+              "application/stream+json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              },
+              "application/json;charset=UTF-8": {
+                "schema": {
+                  "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductStatementsRequest"
+              }
+            },
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductStatementsRequest"
+              }
+            }
+          },
+          "description": "Entrada del Servicio",
+          "required": true
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProductStatementsHeaders": {
+        "type": "object"
+      },
+      "ProductStatementsRequest": {
+        "type": "object",
+        "required": [
+          "product",
+          "documentDate"
+        ],
+        "properties": {
+          "product": {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/domain-product-statement-v2/2.0.0#/components/schemas/Product"
+          },
+          "documentDate": {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/domain-product-statement-v2/2.0.0#/components/schemas/DocumentDate"
+          },
+          "keyValue": {
+            "type": "string",
+            "example": 9876756,
+            "description": "N?mero de documento para encriptar el pdf",
+            "minLength": 1,
+            "maxLength": 30,
+            "pattern": "^[A-Za-z0-9]*$"
+          }
+        },
+        "title": "ProductStatementsRequest"
+      },
+      "ProductStatementsResponse": {
+        "type": "object",
+        "properties": {
+          "extension": {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/domain-product-statement-v2/2.0.0#/components/schemas/Extension"
+          },
+          "size": {
+            "$ref": "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/domain-product-statement-v2/2.0.0#/components/schemas/AccountStatementSize"
+          },
+          "data": {
+            "type": "string",
+            "format": "byte",
+            "example": "liNmNiNmYzZjA2YmE4OGQ",
+            "description": "Contenido del archivo"
+          }
+        },
+        "title": "ProductStatementsResponse"
+      }
+    }
+  }
+}
